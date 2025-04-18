@@ -2,8 +2,7 @@
   "name": "segmenter",
   "version": "0.0.0",
   "private": true,
-  "scripts":
-  {
+  "scripts": {
     "start": "node dist/app.js",
     "build": "tsc",
     "dev": "ts-node app.ts"
@@ -19,6 +18,7 @@
   "devDependencies": {
     "@tsconfig/node20": "^20.1.5",
     "@types/express": "^5.0.1",
+    "@types/morgan": "^1.9.9",
     "@types/node": "^22.14.1",
     "typescript": "^5.8.3"
   }
