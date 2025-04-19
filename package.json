@@ -1,11 +1,13 @@
 {
   "name": "segmenter",
-  "version": "0.0.0",
+  "main": "app.js",
+  "type": "module",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node dist/app.js",
-    "build": "tsc",
-    "dev": "ts-node app.ts"
+    "start": "tsc && node dist/app.js",
+    "build": "tsc && node dist/app.js",
+    "serve": "node dist/app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -20,6 +22,7 @@
     "@types/express": "^5.0.1",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.14.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
 }
