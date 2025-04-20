@@ -28,7 +28,7 @@ const fetchStaff = async (UUIDIn: string): Promise<Staff> =>
   }
   else
   {
-    console.warn('Result does not match UUIDJSON interface:', result);
+    console.warn('Result does not match Staff interface:', result);
   }
 
   return(UUIDResult);
@@ -40,7 +40,7 @@ const fetchStaff = async (UUIDIn: string): Promise<Staff> =>
 
 // get staff by UUID or multiple comma-separated UUIDs
 // returns a JSON array of staff
-staffRouter.get("/:UUID", async (req, res, next) =>
+staffRouter.get("/UUID/:UUID", async (req, res, next) =>
 {
   const UUIDs: string[] = req.params.UUID.split(",").map(UUID => UUID.trim());
 
