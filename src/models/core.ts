@@ -4,3 +4,14 @@ export interface Staff
   name: string;
 }
 
+
+
+
+
+export interface Project
+{
+  _id: string;
+  name: string;
+  annotated: number;
+  imgs: string[];
+}
