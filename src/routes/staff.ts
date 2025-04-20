@@ -1,13 +1,7 @@
 import express from 'express';
 import MUUID from 'uuid-mongodb'
 import { connectDB, closeDB } from "../mdbUtil.js";
-
-
-interface StaffJSON
-{
-  _id: string;
-  name: string;
-}
+import { Staff } from "../models/core.js";
 
 
 const staffRouter = express.Router();
@@ -16,7 +10,7 @@ const staffRouter = express.Router();
 
 
 
-const fetchStaff = async (UUIDIn: string): Promise<StaffJSON> => 
+const fetchStaff = async (UUIDIn: string): Promise<Staff> => 
 {
   const UUID = MUUID.from(UUIDIn);
  
@@ -26,11 +20,11 @@ const fetchStaff = async (UUIDIn: string): Promise<StaffJSON> =>
 
   const result = await collection.findOne({ _id: UUID });
 
-  let UUIDResult: StaffJSON = { _id: '', name: '' };
+  let UUIDResult: Staff = { _id: '', name: '' };
 
   if(result && '_id' in result && 'name' in result)
   {
-    UUIDResult = { _id: result._id.toString(), name: result.name } as StaffJSON;
+    UUIDResult = { _id: result._id.toString(), name: result.name } as Staff;
   }
   else
   {
@@ -45,11 +39,12 @@ const fetchStaff = async (UUIDIn: string): Promise<StaffJSON> =>
 
 
 // get staff by UUID or multiple comma-separated UUIDs
+// returns a JSON array of staff
 staffRouter.get("/:UUID", async (req, res, next) =>
 {
   const UUIDs: string[] = req.params.UUID.split(",").map(UUID => UUID.trim());
 
-  let staffOut: StaffJSON[] = [];
+  let staffOut: Staff[] = [];
 
   try
   {
@@ -60,9 +55,6 @@ staffRouter.get("/:UUID", async (req, res, next) =>
       const staffResult = await fetchStaff(UUIDStr);
       staffOut.push(staffResult);
     }
-
-    //console.log("staffOut = " + JSON.stringify(staffOut));
-    //console.log("==========================================");
 
     res.json(staffOut);
   }
