@@ -26,3 +26,16 @@ export interface Img
   URL: string;
   annotations: string[];
 }
+
+
+
+
+
+export interface Annotation
+{
+  _id: string;
+  annotators: string[];
+  label: string;
+  area: number;
+  points: number[];
+}
