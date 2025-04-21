@@ -10,7 +10,7 @@ const annotationRouter = express.Router();
 
 
 
-const fetchAnnotation = async (UUIDIn: string): Promise<Annotation> => 
+export const fetchAnnotation = async (UUIDIn: string): Promise<Annotation> => 
 {
   const UUID = MUUID.from(UUIDIn);
  

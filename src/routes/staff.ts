@@ -10,7 +10,7 @@ const staffRouter = express.Router();
 
 
 
-const fetchStaff = async (UUIDIn: string): Promise<Staff> => 
+export const fetchStaff = async (UUIDIn: string): Promise<Staff> => 
 {
   const UUID = MUUID.from(UUIDIn);
  

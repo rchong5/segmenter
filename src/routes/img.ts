@@ -10,7 +10,7 @@ const imgRouter = express.Router();
 
 
 
-const fetchImg = async (UUIDIn: string): Promise<Img> => 
+export const fetchImg = async (UUIDIn: string): Promise<Img> => 
 {
   const UUID = MUUID.from(UUIDIn);
  
