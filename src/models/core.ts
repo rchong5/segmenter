@@ -15,3 +15,14 @@ export interface Project
   annotated: number;
   imgs: string[];
 }
+
+
+
+
+
+export interface Img
+{
+  _id: string;
+  URL: string;
+  annotations: string[];
+}
