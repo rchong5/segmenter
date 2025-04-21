@@ -18,11 +18,19 @@ const fetchProjectByName = async (nameIn: string): Promise<Project> =>
 
   const result = await collection.findOne({ name: nameIn });
 
-  let UUIDResult: Project = { _id: '', name: '', annotated: 0, imgs: [] };
+  let UUIDResult: Project = { _id: '', name: '', annotated: 0, annotators: [], imgs: [], annotations: [] };
 
-  if(result && '_id' in result && 'name' in result && 'annotated' in result && 'imgs' in result)
+  if(result && '_id' in result && 'name' in result && 'annotated' in result && 'annotators' in result && 'imgs' in result && 'annotations' in result)
   {
-    UUIDResult = { _id: result._id.toString(), name: result.name, annotated: result.annotated, imgs: result.imgs } as Project;
+    UUIDResult =
+      {
+        _id: result._id.toString(),
+        name: result.name,
+        annotated: result.annotated,
+        annotators: result.annotators,
+        imgs: result.imgs,
+        annotations: result.annotations
+      } as Project;
   }
   else
   {
@@ -46,11 +54,19 @@ const fetchProjectByUUID = async (UUIDIn: string): Promise<Project> =>
 
   const result = await collection.findOne({ _id: UUID });
 
-  let UUIDResult: Project = { _id: '', name: '', annotated: 0, imgs: [] };
+  let UUIDResult: Project = { _id: '', name: '', annotated: 0, annotators: [], imgs: [], annotations: [] };
 
-  if(result && '_id' in result && 'name' in result && 'annotated' in result && 'imgs' in result)
+  if(result && '_id' in result && 'name' in result && 'annotated' in result && 'annotators' in result && 'imgs' in result && 'annotations' in result)
   {
-    UUIDResult = { _id: result._id.toString(), name: result.name, annotated: result.annotated, imgs: result.imgs } as Project;
+    UUIDResult =
+      {
+        _id: result._id.toString(),
+        name: result.name,
+        annotated: result.annotated,
+        annotators: result.annotators,
+        imgs: result.imgs,
+        annotations: result.annotations
+      } as Project;
   }
   else
   {

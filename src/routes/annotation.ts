@@ -13,18 +13,27 @@ const annotationRouter = express.Router();
 export const fetchAnnotation = async (UUIDIn: string): Promise<Annotation> => 
 {
   const UUID = MUUID.from(UUIDIn);
- 
+
   const mdb = await connectDB();
 
   const collection = mdb.collection("annotations");
 
   const result = await collection.findOne({ _id: UUID });
 
-  let UUIDResult: Annotation = { _id: '', annotators: [], label: '', area: 0, points: [] };
+  let UUIDResult: Annotation = { _id: '', annotators: [], img: '', projects: [], label: '', area: 0, points: [] };
 
-  if(result && '_id' in result && 'annotators' in result && 'label' in result && 'area' in result && 'points' in result)
+  if(result && '_id' in result && 'annotators' in result && 'img' in result && 'projects' in result && 'label' in result && 'area' in result && 'points' in result)
   {
-    UUIDResult = { _id: result._id.toString(), annotators: result.annotators, label: result.label, area: result.area, points: result.points } as Annotation;
+    UUIDResult =
+      {
+        _id: result._id.toString(),
+        annotators: result.annotators,
+        img: result.img,
+        projects: result.projects,
+        label: result.label,
+        area: result.area,
+        points: result.points
+      } as Annotation;
   }
   else
   {
@@ -38,8 +47,8 @@ export const fetchAnnotation = async (UUIDIn: string): Promise<Annotation> =>
 
 
 
-// get projects by UUID or multiple comma-separated UUIDs
-// returns a JSON array of projects
+// get annotations by UUID or multiple comma-separated UUIDs
+// returns a JSON array of annotations
 annotationRouter.get("/UUID/:UUID", async (req, res, next) =>
 {
   const UUIDs: string[] = req.params.UUID.split(",").map(UUID => UUID.trim());

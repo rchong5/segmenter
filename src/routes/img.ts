@@ -16,15 +16,22 @@ export const fetchImg = async (UUIDIn: string): Promise<Img> =>
  
   const mdb = await connectDB();
 
-  const collection = mdb.collection("images");
+  const collection = mdb.collection("imgs");
 
   const result = await collection.findOne({ _id: UUID });
 
-  let UUIDResult: Img = { _id: '', URL: '', annotations: [] };
+  let UUIDResult: Img = { _id: '', URL: '', projects: [], annotators: [], annotations: [] };
 
-  if(result && '_id' in result && 'URL' in result && 'annotations' in result)
+  if(result && '_id' in result && 'URL' in result && 'projects' in result && 'annotators' in result && 'annotations' in result)
   {
-    UUIDResult = { _id: result._id.toString(), URL: result.URL, annotations: result.annotations } as Img;
+    UUIDResult =
+      {
+        _id: result._id.toString(),
+        URL: result.URL,
+        projects: result.projects,
+        annotators: result.annotators,
+        annotations: result.annotations
+      } as Img;
   }
   else
   {
@@ -38,8 +45,8 @@ export const fetchImg = async (UUIDIn: string): Promise<Img> =>
 
 
 
-// get projects by UUID or multiple comma-separated UUIDs
-// returns a JSON array of projects
+// get imgs by UUID or multiple comma-separated UUIDs
+// returns a JSON array of imgs
 imgRouter.get("/UUID/:UUID", async (req, res, next) =>
 {
   const UUIDs: string[] = req.params.UUID.split(",").map(UUID => UUID.trim());

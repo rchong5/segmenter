@@ -20,11 +20,18 @@ export const fetchStaff = async (UUIDIn: string): Promise<Staff> =>
 
   const result = await collection.findOne({ _id: UUID });
 
-  let UUIDResult: Staff = { _id: '', name: '' };
+  let UUIDResult: Staff = { _id: '', name: '', projects: [], imgs: [], annotations: [] };
 
-  if(result && '_id' in result && 'name' in result)
+  if(result && '_id' in result && 'name' in result && 'projects' in result && 'imgs' in result && 'annotations' in result)
   {
-    UUIDResult = { _id: result._id.toString(), name: result.name } as Staff;
+    UUIDResult =
+      {
+        _id: result._id.toString(),
+        name: result.name,
+        projects: result.projects,
+        imgs: result.imgs,
+        annotations: result.annotations
+      } as Staff;
   }
   else
   {
