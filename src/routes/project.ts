@@ -18,11 +18,11 @@ const fetchProjectByName = async (nameIn: string): Promise<Project> =>
 
   const result = await collection.findOne({ name: nameIn });
 
-  let UUIDResult: Project = { _id: '', name: '', annotated: 0, annotators: [], imgs: [], annotations: [] };
+  let nameResult: Project = { _id: '', name: '', annotated: 0, annotators: [], imgs: [], annotations: [] };
 
   if(result && '_id' in result && 'name' in result && 'annotated' in result && 'annotators' in result && 'imgs' in result && 'annotations' in result)
   {
-    UUIDResult =
+    nameResult =
       {
         _id: result._id.toString(),
         name: result.name,
@@ -37,7 +37,7 @@ const fetchProjectByName = async (nameIn: string): Promise<Project> =>
     console.warn('Result does not match Project interface:', result);
   }
 
-  return(UUIDResult);
+  return(nameResult);
 }
 
 
