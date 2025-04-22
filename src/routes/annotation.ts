@@ -63,15 +63,15 @@ export const fetchAnnotationByLabel = async (labelIn: string): Promise<Annotatio
   if(result && '_id' in result && 'annotators' in result && 'img' in result && 'projects' in result && 'label' in result && 'area' in result && 'points' in result)
   {
     labelResult =
-      {
-        _id: result._id.toString(),
-        annotators: result.annotators,
-        img: result.img,
-        projects: result.projects,
-        label: result.label,
-        area: result.area,
-        points: result.points
-      } as Annotation;
+    {
+      _id: result._id.toString(),
+      annotators: result.annotators,
+      img: result.img,
+      projects: result.projects,
+      label: result.label,
+      area: result.area,
+      points: result.points
+    } as Annotation;
   }
   else
   {
@@ -86,37 +86,81 @@ export const fetchAnnotationByLabel = async (labelIn: string): Promise<Annotatio
 
 
 export const fetchAnnotationByUUID = async (UUIDIn: string): Promise<Annotation> => 
+{
+  const UUID = MUUID.from(UUIDIn);
+
+  const mdb = await connectDB();
+
+  const collection = mdb.collection("annotations");
+
+  const result = await collection.findOne({ _id: UUID });
+
+  let UUIDResult: Annotation = { _id: '', annotators: [], img: '', projects: [], label: '', area: 0, points: [] };
+
+  if(result && '_id' in result && 'annotators' in result && 'img' in result && 'projects' in result && 'label' in result && 'area' in result && 'points' in result)
   {
-    const UUID = MUUID.from(UUIDIn);
-  
-    const mdb = await connectDB();
-  
-    const collection = mdb.collection("annotations");
-  
-    const result = await collection.findOne({ _id: UUID });
-  
+    UUIDResult =
+    {
+      _id: result._id.toString(),
+      annotators: result.annotators,
+      img: result.img,
+      projects: result.projects,
+      label: result.label,
+      area: result.area,
+      points: result.points
+    } as Annotation;
+  }
+  else
+  {
+    console.warn('Result does not match Annotation interface:', result);
+  }
+
+  return(UUIDResult);
+}
+
+
+
+
+
+export const fetchAnnotationByAnnotatorUUID = async (UUIDIn: string): Promise<Annotation[]> => 
+{
+  const UUID = MUUID.from(UUIDIn);
+
+  const mdb = await connectDB();
+
+  const collection = mdb.collection("annotations");
+
+  const result = collection.find({ annotators: { $in: [UUID] } });
+
+  let resultArray: Annotation[] = [];
+
+  for await (const doc of result)
+  {
     let UUIDResult: Annotation = { _id: '', annotators: [], img: '', projects: [], label: '', area: 0, points: [] };
-  
-    if(result && '_id' in result && 'annotators' in result && 'img' in result && 'projects' in result && 'label' in result && 'area' in result && 'points' in result)
+
+    if(doc && '_id' in doc && 'annotators' in doc && 'img' in doc && 'projects' in doc && 'label' in doc && 'area' in doc && 'points' in doc)
     {
       UUIDResult =
-        {
-          _id: result._id.toString(),
-          annotators: result.annotators,
-          img: result.img,
-          projects: result.projects,
-          label: result.label,
-          area: result.area,
-          points: result.points
-        } as Annotation;
+      {
+        _id: doc._id.toString(),
+        annotators: doc.annotators,
+        img: doc.img,
+        projects: doc.projects,
+        label: doc.label,
+        area: doc.area,
+        points: doc.points
+      } as Annotation;
+
+      resultArray.push(UUIDResult);
     }
     else
     {
       console.warn('Result does not match Annotation interface:', result);
     }
-  
-    return(UUIDResult);
   }
+
+  return(resultArray);
+}
 
 
 
@@ -139,15 +183,15 @@ export const fetchAnnotationAreaRankByUUID = async (UUIDIn: string): Promise<num
   if(result && '_id' in result && 'annotators' in result && 'img' in result && 'projects' in result && 'label' in result && 'area' in result && 'points' in result)
   {
     UUIDResult =
-      {
-        _id: result._id.toString(),
-        annotators: result.annotators,
-        img: result.img,
-        projects: result.projects,
-        label: result.label,
-        area: result.area,
-        points: result.points
-      } as Annotation;
+    {
+      _id: result._id.toString(),
+      annotators: result.annotators,
+      img: result.img,
+      projects: result.projects,
+      label: result.label,
+      area: result.area,
+      points: result.points
+    } as Annotation;
 
     const imgResult: Img = await fetchImg(UUIDResult.img);
 
@@ -204,12 +248,41 @@ annotationRouter.get("/UUID/:UUID/area/rank", async (req, res, next) =>
 routes to GET full annotation documents
 ===========================================*/
 
+// get annotations by annotator's UUID
+// returns a JSON array of annotations
+annotationRouter.get("/annotator/UUID/:UUID", async (req, res, next) =>
+{
+    let annotationOut: Annotation[] = [];
+  
+    try
+    {
+      console.log("Attempting to fetch annotations by annotator's UUID => " + req.params.UUID);
+  
+      const annotationResult: Annotation[] = await fetchAnnotationByAnnotatorUUID(req.params.UUID);
+      //annotationOut.push(annotationResult);
+  
+      res.json(annotationResult);
+    }
+    catch (error)
+    {
+      console.error("Error fetching annotations by annotator's UUID:", error);
+      res.status(500).json({ error: "Failed to fetch annotations by annotator's UUID" });
+      return next(error);
+    }
+    finally
+    {
+        await closeDB();
+    }
+});
+
+
+
+
+
 // get annotations by label
 // returns a JSON array of annotations
 annotationRouter.get("/label/:label", async (req, res, next) =>
 {
-//    const UUIDs: string[] = req.params.UUID.split(",").map(UUID => UUID.trim());
-  
     let annotationOut: Annotation[] = [];
   
     try
@@ -249,7 +322,7 @@ annotationRouter.get("/UUID/:UUID", async (req, res, next) =>
   {
     for(const UUIDStr of UUIDs)
     {
-      console.log("Attempting to fetch annotations by uuid => " + UUIDStr);
+      console.log("Attempting to fetch annotations by UUID => " + UUIDStr);
 
       const annotationResult = await fetchAnnotationByUUID(UUIDStr);
       annotationOut.push(annotationResult);
