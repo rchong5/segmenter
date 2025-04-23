@@ -140,3 +140,15 @@ db.getCollection("annotations").insertMany([
     "points": [{"x": 290, "y": 310}, {"x": 460, "y": 475}, {"x": 500, "y": 490}, {"x": 460, "y": 535}, {"x": 280, "y": 340}]
 }
 */
+
+
+/*
+{
+    "annotation": "0d88f764-2cf7-4c77-b1e8-e27eca7cc4eb",
+    "annotators": ["9050477f-55ae-4e6a-8968-316065eeeff7", "d46bf151-7d4d-4d75-b9ff-d8223acbf2a0"],
+    "img": "53c2e409-389c-4a9d-9f97-616c58a3f24f",
+    "projects": ["bc5396ab-d72f-4f01-b995-f2af6bf87ecd"],
+    "label": "litter",
+    "points": [{"x": 140, "y": 145}, {"x": 170, "y": 150}, {"x": 200, "y": 175}, {"x": 210, "y": 220}, {"x": 225, "y": 100}, {"x": 200, "y": 105}, {"x": 150, "y": 125}]
+}
+*/

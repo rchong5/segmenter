@@ -6,7 +6,7 @@ import { imgHasAnnotation } from "./validate.js"
 
 
 
-export const updateStaffLattice = async (staffUUIDIn: string, projectUUIDIn: string, imgUUIDIn: string, annotationUUIDIn: string) => 
+const upsertStaffLattice = async (staffUUIDIn: string, projectUUIDIn: string, imgUUIDIn: string, annotationUUIDIn: string) => 
 {
     const mdb = await connectDB();
 
@@ -30,7 +30,28 @@ export const updateStaffLattice = async (staffUUIDIn: string, projectUUIDIn: str
 
 
 
-export const updateProjectLattice = async (projectUUIDIn: string, annotatorUUIDIn: string, imgUUIDIn: string, annotationUUIDIn: string) => 
+export const updateStaffLattice = async (staffUUIDsIn: string[], projectUUIDsIn: string[], imgUUIDsIn: string[], annotationUUIDsIn: string[]) => 
+{
+    for(let i = 0; i < staffUUIDsIn.length; i++)
+    {
+        for(let j = 0; j < projectUUIDsIn.length; j++)
+        {
+            for(let k = 0; k < imgUUIDsIn.length; k++)
+            {
+                for(let l = 0; l < annotationUUIDsIn.length; l++)
+                {
+                    await upsertStaffLattice(staffUUIDsIn[i], projectUUIDsIn[j], imgUUIDsIn[k], annotationUUIDsIn[l]);
+                }
+            }
+        }
+    }    
+}
+
+
+
+
+
+const upsertProjectLattice = async (projectUUIDIn: string, annotatorUUIDIn: string, imgUUIDIn: string, annotationUUIDIn: string) => 
 {
     const mdb = await connectDB();
 
@@ -73,12 +94,12 @@ export const updateProjectLattice = async (projectUUIDIn: string, annotatorUUIDI
 
             if(!annotatedResult)
             {
-                throw new Error("[updateProjectLattice] ERROR: Unable to update the value of annotated to " + a + " for project (" + projectUUIDIn.toString() + ")");
+                throw new Error("[upsertProjectLattice] ERROR: Unable to update the value of annotated to " + a + " for project (" + projectUUIDIn.toString() + ")");
             }
         }
         else
         {
-            console.warn('[updateProjectLattice] Result unexpectedly missing imgs array', imgResult);
+            console.warn('[upsertProjectLattice] Result unexpectedly missing imgs array', imgResult);
         }
         
         
@@ -89,7 +110,28 @@ export const updateProjectLattice = async (projectUUIDIn: string, annotatorUUIDI
 
 
 
-export const updateImgLattice = async (imgUUIDIn: string, projectUUIDIn: string, annotatorUUIDIn: string, annotationUUIDIn: string) => 
+export const updateProjectLattice = async (projectUUIDsIn: string[], annotatorUUIDsIn: string[], imgUUIDsIn: string[], annotationUUIDsIn: string[]) => 
+{
+    for(let i = 0; i < projectUUIDsIn.length; i++)
+    {
+        for(let j = 0; j < annotatorUUIDsIn.length; j++)
+        {
+            for(let k = 0; k < imgUUIDsIn.length; k++)
+            {
+                for(let l = 0; l < annotationUUIDsIn.length; l++)
+                {
+                    await upsertProjectLattice(projectUUIDsIn[i], annotatorUUIDsIn[j], imgUUIDsIn[k], annotationUUIDsIn[l]);
+                }
+            }
+        }
+    }   
+}
+
+
+
+
+
+const upsertImgLattice = async (imgUUIDIn: string, projectUUIDIn: string, annotatorUUIDIn: string, annotationUUIDIn: string) => 
 {
     const mdb = await connectDB();
 
@@ -108,4 +150,24 @@ export const updateImgLattice = async (imgUUIDIn: string, projectUUIDIn: string,
                                                     }
                                                 );
 }
-    
+
+
+
+
+
+export const updateImgLattice = async (imgUUIDsIn: string[], projectUUIDsIn: string[], annotatorUUIDsIn: string[], annotationUUIDsIn: string[]) => 
+{
+    for(let i = 0; i < imgUUIDsIn.length; i++)
+    {
+        for(let j = 0; j < projectUUIDsIn.length; j++)
+        {
+            for(let k = 0; k < annotatorUUIDsIn.length; k++)
+            {
+                for(let l = 0; l < annotationUUIDsIn.length; l++)
+                {
+                    await upsertImgLattice(imgUUIDsIn[i], projectUUIDsIn[j], annotatorUUIDsIn[k], annotationUUIDsIn[l]);
+                }
+            }
+        }
+    }   
+}
