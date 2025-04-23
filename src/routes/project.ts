@@ -46,13 +46,13 @@ const fetchProjectByName = async (nameIn: string): Promise<Project> =>
 
 const fetchProjectByUUID = async (UUIDIn: string): Promise<Project> => 
 {
-  const UUID = MUUID.from(UUIDIn);
+  const UUIDObj = MUUID.from(UUIDIn);
  
   const mdb = await connectDB();
 
   const collection = mdb.collection("projects");
 
-  const result = await collection.findOne({ _id: UUID });
+  const result = await collection.findOne({ _id: UUIDObj });
 
   let UUIDResult: Project = { _id: '', name: '', annotated: 0, annotators: [], imgs: [], annotations: [] };
 

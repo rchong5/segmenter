@@ -12,13 +12,13 @@ const imgRouter = express.Router();
 
 export const fetchImg = async (UUIDIn: string): Promise<Img> => 
 {
-  const UUID = MUUID.from(UUIDIn);
+  const UUIDObj = MUUID.from(UUIDIn);
  
   const mdb = await connectDB();
 
   const collection = mdb.collection("imgs");
 
-  const result = await collection.findOne({ _id: UUID });
+  const result = await collection.findOne({ _id: UUIDObj });
 
   let UUIDResult: Img = { _id: '', URL: '', projects: [], annotators: [], annotations: [] };
 

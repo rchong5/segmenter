@@ -41,9 +41,9 @@ db.getCollection("projects").insertMany([
   {
     _id: UUID("bc5396ab-d72f-4f01-b995-f2af6bf87ecd"),
     "name": "kittens",
-    "annotated": 100,
+    "annotated": 50,
     "annotators": [UUID("9050477f-55ae-4e6a-8968-316065eeeff7")],
-    "imgs": [UUID("53c2e409-389c-4a9d-9f97-616c58a3f24f")],
+    "imgs": [UUID("53c2e409-389c-4a9d-9f97-616c58a3f24f"), UUID("f8899e82-aa6b-489c-876e-2b2d400b9454")],
     "annotations": [UUID("b8dc0730-f8f1-4280-b9c6-c1b7d52ca44d"), UUID("0d88f764-2cf7-4c77-b1e8-e27eca7cc4eb")]
   },
   {
@@ -74,6 +74,13 @@ db.getCollection("imgs").insertMany([
     "projects": [UUID("25322e48-8a91-4d9d-886c-b74aa2de9f86")],
     "annotators": [UUID("d46bf151-7d4d-4d75-b9ff-d8223acbf2a0")],
     "annotations": [UUID("178cb145-53e3-417a-9ae0-cf0eca9aafc5"), UUID("a928bc70-2946-4910-8e2a-1bebe3c453ff")]
+  },
+  {
+    _id: UUID("f8899e82-aa6b-489c-876e-2b2d400b9454"),
+    "URL": "https://www.cats.org.uk/media/12883/210908ncac104.jpg",
+    "projects": [UUID("bc5396ab-d72f-4f01-b995-f2af6bf87ecd")],
+    "annotators": [],
+    "annotations": []
   },
 ]);
 
@@ -123,3 +130,13 @@ db.getCollection("annotations").insertMany([
 
 
 
+
+/*
+{
+    "annotator": "d46bf151-7d4d-4d75-b9ff-d8223acbf2a0",
+    "img": "53c2e409-389c-4a9d-9f97-616c58a3f24f",
+    "project": "bc5396ab-d72f-4f01-b995-f2af6bf87ecd",
+    "label": "feather",
+    "points": [{"x": 290, "y": 310}, {"x": 460, "y": 475}, {"x": 500, "y": 490}, {"x": 460, "y": 535}, {"x": 280, "y": 340}]
+}
+*/

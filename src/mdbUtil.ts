@@ -52,6 +52,7 @@ export async function closeDB(): Promise<void>
       await client.close();
       db = null;
       console.log('MongoDB connection closed');
+      console.log("");
   }
 }
 

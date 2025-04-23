@@ -12,13 +12,13 @@ const staffRouter = express.Router();
 
 export const fetchStaff = async (UUIDIn: string): Promise<Staff> => 
 {
-  const UUID = MUUID.from(UUIDIn);
+  const UUIDObj = MUUID.from(UUIDIn);
  
   const mdb = await connectDB();
 
   const collection = mdb.collection("staff");
 
-  const result = await collection.findOne({ _id: UUID });
+  const result = await collection.findOne({ _id: UUIDObj });
 
   let UUIDResult: Staff = { _id: '', name: '', projects: [], imgs: [], annotations: [] };
 

@@ -1,8 +1,11 @@
 import express from 'express';
 import MUUID from 'uuid-mongodb'
 import { connectDB, closeDB } from "../mdbUtil.js";
-import { Annotation, Img } from "../models/core.js"
+import { Annotation, Img, Pt } from "../models/core.js"
 import { fetchImg } from "./img.js";
+import { calcArea } from '../utils/calc.js';
+import { updateProjectLattice, updateStaffLattice, updateImgLattice } from '../utils/lattice.js';
+import { staffUUIDExists, projectUUIDExists, imgUUIDExists } from '../utils/validate.js';
 
 
 const annotationRouter = express.Router();
@@ -87,13 +90,13 @@ export const fetchAnnotationByLabel = async (labelIn: string): Promise<Annotatio
 
 export const fetchAnnotationByUUID = async (UUIDIn: string): Promise<Annotation> => 
 {
-  const UUID = MUUID.from(UUIDIn);
+  const UUIDObj = MUUID.from(UUIDIn);
 
   const mdb = await connectDB();
 
   const collection = mdb.collection("annotations");
 
-  const result = await collection.findOne({ _id: UUID });
+  const result = await collection.findOne({ _id: UUIDObj });
 
   let UUIDResult: Annotation = { _id: '', annotators: [], img: '', projects: [], label: '', area: 0, points: [] };
 
@@ -124,13 +127,13 @@ export const fetchAnnotationByUUID = async (UUIDIn: string): Promise<Annotation>
 
 export const fetchAnnotationByAnnotatorUUID = async (UUIDIn: string): Promise<Annotation[]> => 
 {
-  const UUID = MUUID.from(UUIDIn);
+  const UUIDObj = MUUID.from(UUIDIn);
 
   const mdb = await connectDB();
 
   const collection = mdb.collection("annotations");
 
-  const result = collection.find({ annotators: { $in: [UUID] } });
+  const result = collection.find({ annotators: { $in: [UUIDObj] } });
 
   let resultArray: Annotation[] = [];
 
@@ -168,13 +171,13 @@ export const fetchAnnotationByAnnotatorUUID = async (UUIDIn: string): Promise<An
 
 export const fetchAnnotationAreaRankByUUID = async (UUIDIn: string): Promise<number> => 
 {
-  const UUID = MUUID.from(UUIDIn);
+  const UUIDObj = MUUID.from(UUIDIn);
 
   const mdb = await connectDB();
 
   const collection = mdb.collection("annotations");
 
-  const result = await collection.findOne({ _id: UUID });
+  const result = await collection.findOne({ _id: UUIDObj });
 
   let UUIDResult: Annotation = { _id: '', annotators: [], img: '', projects: [], label: '', area: 0, points: [] };
 
@@ -341,5 +344,106 @@ annotationRouter.get("/UUID/:UUID", async (req, res, next) =>
      await closeDB();
   }
 });
+
+
+
+
+
+/*===========================================
+routes to POST annotation
+===========================================*/
+
+annotationRouter.post("/", async (req, res, next) =>
+{
+  const annotatorUUID = MUUID.from(req.body.annotator as string);
+  const imgUUID = MUUID.from(req.body.img as string);
+  const projectUUID = MUUID.from(req.body.project as string);
+  const pts = req.body.points as Pt[];
+  const label = req.body.label as string;
+
+
+  try
+  {
+    if((await staffUUIDExists(annotatorUUID.toString())).valueOf())
+    {
+      if((await projectUUIDExists(projectUUID.toString())).valueOf())
+      {
+        if((await imgUUIDExists(imgUUID.toString())).valueOf())
+        {
+          const mdb = await connectDB();
+
+          const collection = mdb.collection("annotations");
+          
+          const result = await collection.insertOne(
+                                                    { // @ts-ignore
+                                                      _id: MUUID.v4(),
+                                                      annotators: [annotatorUUID],
+                                                      img: imgUUID,
+                                                      projects: [projectUUID],
+                                                      label: label,
+                                                      area: calcArea(pts),
+                                                      points: pts
+                                                    });
+
+
+          await updateStaffLattice(annotatorUUID.toString(), projectUUID.toString(), imgUUID.toString(), result.insertedId.toString());
+
+          await updateProjectLattice(projectUUID.toString(), annotatorUUID.toString(), imgUUID.toString(), result.insertedId.toString());
+
+          await updateImgLattice(imgUUID.toString(), projectUUID.toString(), annotatorUUID.toString(), result.insertedId.toString());
+
+
+          if(result)
+          {
+            let successStr: string = "[Insert Annotation] Successfully inserted a new annotation (" + result.insertedId.toString();
+            successStr += ") for annotator (" + annotatorUUID.toString() + ") and image (" + imgUUID.toString() + ") and project (" + projectUUID.toString() + ")";
+
+            res.status(201).send(successStr);
+          }
+          else
+          {
+            let errorStr: string = "[Insert Annotation] ERROR: Failed to create a new annotation for annotator (" + annotatorUUID.toString();
+            errorStr += ") and image (" + imgUUID.toString() + ") and project (" + projectUUID.toString() + ")";
+
+            res.status(500).send(errorStr);
+          }
+
+        }
+        else
+        {
+          throw new Error("[Insert Annotation] ERROR: Specified img does not exist. (" + imgUUID.toString() + ")");
+        }
+      }
+      else
+      {
+        throw new Error("[Insert Annotation] ERROR: Specified project does not exist. (" + projectUUID.toString() + ")");
+      }
+    }
+    else
+    {
+      throw new Error("[Insert Annotation] ERROR: Specified annotator is not a member of staff. (" + annotatorUUID.toString() + ")");
+    }
+
+  }
+  catch (error)
+  {
+    let errorMessage: string = "[Insert Annotation] ERROR: ";
+    errorMessage += "Failed to insert annotation by annotator " + annotatorUUID.toString();
+    errorMessage += " and image " + imgUUID.toString() + " and project " + projectUUID.toString();
+
+    console.error(errorMessage, error);
+
+    res.status(500).json({ error: errorMessage});
+    return next(error);
+  }
+  finally
+  {
+      await closeDB();
+  }
+});
+
+
+
+
 
 export default annotationRouter;

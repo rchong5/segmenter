@@ -48,3 +48,13 @@ export interface Annotation
   area: number;
   points: number[];
 }
+
+
+
+
+
+export interface Pt
+{
+  x: number;
+  y: number;
+}
