@@ -1,0 +1,775 @@
+{
+	"info": {
+		"_postman_id": "ebe7c386-ef48-4ada-b3fd-8291068dd829",
+		"name": "segmenter API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44235134"
+	},
+	"item": [
+		{
+			"name": "staff end-points",
+			"item": [
+				{
+					"name": "staff/UUID/:UUID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:25000/staff/UUID/:UUID",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"staff",
+								"UUID",
+								":UUID"
+							],
+							"variable": [
+								{
+									"key": "UUID",
+									"value": "UUID of target staff member [annotator] OR multiple comma-separated UUIDs of target staff members [annotators]",
+									"type": "string"
+								}
+							]
+						},
+						"description": "get staff by UUID or multiple comma-separated UUIDs\n\nreturns a JSON array of staff"
+					},
+					"response": [
+						{
+							"name": "staff/UUID/:UUID - single",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/staff/UUID/:UUID",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"staff",
+										"UUID",
+										":UUID"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "d46bf151-7d4d-4d75-b9ff-d8223acbf2a0",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "staff/UUID/:UUID - multi",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/staff/UUID/:UUID",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"staff",
+										"UUID",
+										":UUID"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "d46bf151-7d4d-4d75-b9ff-d8223acbf2a0,9050477f-55ae-4e6a-8968-316065eeeff7",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "project end-points",
+			"item": [
+				{
+					"name": "project/name/:name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:25000/project/name/:name",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"project",
+								"name",
+								":name"
+							],
+							"variable": [
+								{
+									"key": "name",
+									"value": "name of target project OR multiple comma-separated names of target projects",
+									"type": "string"
+								}
+							]
+						},
+						"description": "get projects by name or multiple comma-separated names\n\nreturns a JSON array of projects"
+					},
+					"response": [
+						{
+							"name": "project/name/:name - single",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/project/name/:name",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"project",
+										"name",
+										":name"
+									],
+									"variable": [
+										{
+											"key": "name",
+											"value": "puppies"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "project/name/:name - multi",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/project/name/:name",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"project",
+										"name",
+										":name"
+									],
+									"variable": [
+										{
+											"key": "name",
+											"value": "puppies,kittens",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "project/UUID/:UUID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:25000/project/UUID/:UUID",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"project",
+								"UUID",
+								":UUID"
+							],
+							"variable": [
+								{
+									"key": "UUID",
+									"value": "UUID of target project OR multiple comma-separated UUIDs of target projects",
+									"type": "string"
+								}
+							]
+						},
+						"description": "get projects by UUID or multiple comma-separated UUIDs\n\nreturns a JSON array of projects"
+					},
+					"response": [
+						{
+							"name": "project/UUID/:UUID - single",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/project/UUID/:UUID",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"project",
+										"UUID",
+										":UUID"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "25322e48-8a91-4d9d-886c-b74aa2de9f86",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "project/UUID/:UUID - multi",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/project/UUID/:UUID",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"project",
+										"UUID",
+										":UUID"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "25322e48-8a91-4d9d-886c-b74aa2de9f86,bc5396ab-d72f-4f01-b995-f2af6bf87ecd",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "img end-points",
+			"item": [
+				{
+					"name": "img/UUID/:UUID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:25000/img/UUID/:UUID",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"img",
+								"UUID",
+								":UUID"
+							],
+							"variable": [
+								{
+									"key": "UUID",
+									"value": "UUID of target img OR multiple comma-separated UUIDs of target imgs",
+									"type": "string"
+								}
+							]
+						},
+						"description": "get imgs by UUID or multiple comma-separated UUIDs\n\nreturns a JSON array of imgs"
+					},
+					"response": [
+						{
+							"name": "img/UUID/:UUID - single",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/img/UUID/:UUID",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"img",
+										"UUID",
+										":UUID"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "3f7d1d1c-c14e-4b5c-aab3-4ba81839c499",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "img/UUID/:UUID - multi",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/img/UUID/:UUID",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"img",
+										"UUID",
+										":UUID"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "3f7d1d1c-c14e-4b5c-aab3-4ba81839c499,53c2e409-389c-4a9d-9f97-616c58a3f24f,f8899e82-aa6b-489c-876e-2b2d400b9454",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "annotation end-points",
+			"item": [
+				{
+					"name": "annotation/UUID/:UUID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:25000/annotation/UUID/:UUID",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"annotation",
+								"UUID",
+								":UUID"
+							],
+							"variable": [
+								{
+									"key": "UUID",
+									"value": "UUID of target annotation OR multiple comma-separated UUIDs of target annotations",
+									"type": "string"
+								}
+							]
+						},
+						"description": "get annotations by UUID or multiple comma-separated UUIDs\n\nreturns a JSON array of annotations"
+					},
+					"response": [
+						{
+							"name": "annotation/UUID/:UUID - single",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/annotation/UUID/:UUID",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"annotation",
+										"UUID",
+										":UUID"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "178cb145-53e3-417a-9ae0-cf0eca9aafc5",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "annotation/UUID/:UUID - multi",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/annotation/UUID/:UUID",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"annotation",
+										"UUID",
+										":UUID"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "178cb145-53e3-417a-9ae0-cf0eca9aafc5,a928bc70-2946-4910-8e2a-1bebe3c453ff,b8dc0730-f8f1-4280-b9c6-c1b7d52ca44d,0d88f764-2cf7-4c77-b1e8-e27eca7cc4eb",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "annotation/label/:label",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:25000/annotation/label/:label",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"annotation",
+								"label",
+								":label"
+							],
+							"variable": [
+								{
+									"key": "label",
+									"value": "label of target annotation",
+									"type": "string"
+								}
+							]
+						},
+						"description": "get annotations by label\n\nreturns a JSON array of annotations"
+					},
+					"response": [
+						{
+							"name": "annotation/label/:label",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/annotation/label/:label",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"annotation",
+										"label",
+										":label"
+									],
+									"variable": [
+										{
+											"key": "label",
+											"value": "arf",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "annotation/annotator/UUID/:UUID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:25000/annotation/annotator/UUID/:UUID",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"annotation",
+								"annotator",
+								"UUID",
+								":UUID"
+							],
+							"variable": [
+								{
+									"key": "UUID",
+									"value": "UUID of target annotator",
+									"type": "string"
+								}
+							]
+						},
+						"description": "get annotations by annotator's UUID\n\nreturns a JSON array of annotations"
+					},
+					"response": [
+						{
+							"name": "annotation/annotator/UUID/:UUID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/annotation/annotator/UUID/:UUID",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"annotation",
+										"annotator",
+										"UUID",
+										":UUID"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "d46bf151-7d4d-4d75-b9ff-d8223acbf2a0",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "annotation/UUID/:UUID/area/rank",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:25000/annotation/UUID/:UUID/area/rank",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"annotation",
+								"UUID",
+								":UUID",
+								"area",
+								"rank"
+							],
+							"variable": [
+								{
+									"key": "UUID",
+									"value": "UUID of target annotation",
+									"type": "string"
+								}
+							]
+						},
+						"description": "get annotation area rank by UUID\n\nreturns an integer value of the rank amongst all annotations for the associated img where 1 is the highest rank (most area)"
+					},
+					"response": [
+						{
+							"name": "annotation/UUID/:UUID/area/rank",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:25000/annotation/UUID/:UUID/area/rank",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"annotation",
+										"UUID",
+										":UUID",
+										"area",
+										"rank"
+									],
+									"variable": [
+										{
+											"key": "UUID",
+											"value": "178cb145-53e3-417a-9ae0-cf0eca9aafc5",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "annotation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"annotator\": \"UUID of target annotator\",\n    \"img\": \"UUID of target img\",\n    \"project\": \"UUID of target project\",\n    \"label\": \"desired label name\",\n    \"points\": \"array of point dictionaries | example => \" [{\"x\": int, \"y\": int}, {\"x\": int, \"y\": int}, ...]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:25000/annotation",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"annotation"
+							]
+						},
+						"description": "Given that the specified annotator, img, and project exist: inserts a new annotation for the specified annotator/img/project combination with the specified label and array of points"
+					},
+					"response": [
+						{
+							"name": "annotation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"annotator\": \"d46bf151-7d4d-4d75-b9ff-d8223acbf2a0\",\n    \"img\": \"53c2e409-389c-4a9d-9f97-616c58a3f24f\",\n    \"project\": \"bc5396ab-d72f-4f01-b995-f2af6bf87ecd\",\n    \"label\": \"feather\",\n    \"points\": [{\"x\": 290, \"y\": 310}, {\"x\": 460, \"y\": 475}, {\"x\": 500, \"y\": 490}, {\"x\": 460, \"y\": 535}, {\"x\": 280, \"y\": 340}]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:25000/annotation",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"annotation"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "annotation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"annotation\": \"UUID of target annotation\",\n    \"annotator\": \"string array of UUIDs of target annotators\",\n    \"img\": \"UUID of target img\",\n    \"project\": \"string array of UUIDs of target projects\",\n    \"label\": \"desired label name\",\n    \"points\": \"array of point dictionaries | example => \" [{\"x\": int, \"y\": int}, {\"x\": int, \"y\": int}, ...]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:25000/annotation",
+							"host": [
+								"localhost"
+							],
+							"port": "25000",
+							"path": [
+								"annotation"
+							]
+						},
+						"description": "Given that the specified annotation, annotators, img, and projects exist: updates the specified annotation with the specified annotators, img, projects, label and array of points"
+					},
+					"response": [
+						{
+							"name": "annotation",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"annotation\": \"0d88f764-2cf7-4c77-b1e8-e27eca7cc4eb\",\n    \"annotators\": [\"9050477f-55ae-4e6a-8968-316065eeeff7\", \"d46bf151-7d4d-4d75-b9ff-d8223acbf2a0\"],\n    \"img\": \"53c2e409-389c-4a9d-9f97-616c58a3f24f\",\n    \"projects\": [\"bc5396ab-d72f-4f01-b995-f2af6bf87ecd\"],\n    \"label\": \"litter\",\n    \"points\": [{\"x\": 140, \"y\": 145}, {\"x\": 170, \"y\": 150}, {\"x\": 200, \"y\": 175}, {\"x\": 210, \"y\": 220}, {\"x\": 225, \"y\": 100}, {\"x\": 200, \"y\": 105}, {\"x\": 150, \"y\": 125}]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:25000/annotation",
+									"host": [
+										"localhost"
+									],
+									"port": "25000",
+									"path": [
+										"annotation"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		}
+	]
+}
