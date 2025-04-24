@@ -5,7 +5,7 @@ import { Annotation, Img, Pt } from "../models/core.js"
 import { fetchImg } from "./img.js";
 import { calcArea } from '../utils/calc.js';
 import { updateProjectLattice, updateStaffLattice, updateImgLattice } from '../utils/lattice.js';
-import { staffUUIDExists, projectUUIDExists, imgUUIDExists } from '../utils/validate.js';
+import { staffUUIDExists, projectUUIDExists, imgUUIDExists, annotationUUIDExists } from '../utils/validate.js';
 
 
 const annotationRouter = express.Router();
@@ -219,7 +219,7 @@ routes to GET annotation area rank
 ===========================================*/
 
 // get annotation area rank by UUID
-// returns an integer value of the rank where 1 is the highest rank (most area)
+// returns an integer value of the rank amongst all annotations for the associated img where 1 is the highest rank (most area)
 annotationRouter.get("/UUID/:UUID/area/rank", async (req, res, next) =>
 {
   try
@@ -353,6 +353,9 @@ annotationRouter.get("/UUID/:UUID", async (req, res, next) =>
 routes to POST annotation
 ===========================================*/
 
+// Given that the specified annotator, img, and project exist:
+// inserts a new annotation for the specified annotator/img/project
+// combination with the specified label and array of points
 annotationRouter.post("/", async (req, res, next) =>
 {
   const annotatorUUID = MUUID.from(req.body.annotator as string);
@@ -455,6 +458,8 @@ annotationRouter.post("/", async (req, res, next) =>
 routes to PUT annotation
 ===========================================*/
 
+// Given that the specified annotation, annotators, img, and projects exist:
+// updates the specified annotation with the specified annotators, img, projects, label and array of points
 annotationRouter.put("/", async (req, res, next) =>
 {
   const annotationUUID = MUUID.from(req.body.annotation as string);
@@ -468,119 +473,125 @@ annotationRouter.put("/", async (req, res, next) =>
   
   try
   {
-    // confirm all annotators in the array exist while building the annotatorUUID array
-    let annotatorUUIDs: MUUID.MUUID[] = [];
-
-    for(let i = 0; i < annotatorArray.length; i++)
+    if((await annotationUUIDExists(annotationUUID.toString())).valueOf())
     {
-      if(!(await staffUUIDExists(annotatorArray[i])).valueOf())
-      {
-        throw new Error("[Update Annotation] ERROR: Specified annotator is not a member of staff. (" + annotatorArray[i].toString() + ")");
-      }
-      else
-      {
-        annotatorUUIDs.push(MUUID.from(annotatorArray[i]));
-      }
-    }
-
-
-    // confirm all projects in the array exist
-    let projectUUIDs: MUUID.MUUID[] = [];
-
-    for(let i = 0; i < projectArray.length; i++)
-    {
-      if(!(await projectUUIDExists(projectArray[i])).valueOf())
-      {
-        throw new Error("[Update Annotation] ERROR: Specified project does not exist. (" + projectArray[i].toString() + ")");
-      }
-      else
-      {
-        projectUUIDs.push(MUUID.from(projectArray[i]));
-      }
-    }
-
-
-    if((await imgUUIDExists(imgUUID.toString())).valueOf())
-    {
-      const mdb = await connectDB();
-
-      const collection = mdb.collection("annotations");
-
-      const result = await collection.updateOne(
-                                                { _id: annotationUUID },
-                                                { $set: 
-                                                  { annotators: annotatorUUIDs,
-                                                    img: imgUUID,
-                                                    projects: projectUUIDs,
-                                                    label: label,
-                                                    area: calcArea(pts),
-                                                    points: pts
-                                                  }});
-
-
-      const imgArray: string[] = [imgUUID.toString()];
-      const annotationArray: string[] = [annotationUUID.toString()];
-
-      await updateStaffLattice(annotatorArray, projectArray, imgArray, annotationArray);
-
-      await updateProjectLattice(projectArray, annotatorArray, imgArray, annotationArray);
-
-      await updateImgLattice(imgArray, projectArray, annotatorArray, annotationArray);
-
-
-      let annotatorStr: string = "(";
+      // confirm all annotators in the array exist while building the annotatorUUID array
+      let annotatorUUIDs: MUUID.MUUID[] = [];
 
       for(let i = 0; i < annotatorArray.length; i++)
       {
-        annotatorStr += annotatorArray[i].toString();
-
-        if(i < annotatorArray.length - 1)
+        if(!(await staffUUIDExists(annotatorArray[i])).valueOf())
         {
-          annotatorStr += ", ";
+          throw new Error("[Update Annotation] ERROR: Specified annotator is not a member of staff. (" + annotatorArray[i].toString() + ")");
+        }
+        else
+        {
+          annotatorUUIDs.push(MUUID.from(annotatorArray[i]));
         }
       }
 
-      annotatorStr += ")";
 
-
-      let projectStr: string = "(";
+      // confirm all projects in the array exist
+      let projectUUIDs: MUUID.MUUID[] = [];
 
       for(let i = 0; i < projectArray.length; i++)
       {
-        projectStr += projectArray[i].toString();
-
-        if(i < projectArray.length - 1)
+        if(!(await projectUUIDExists(projectArray[i])).valueOf())
         {
-          projectStr += ", ";
+          throw new Error("[Update Annotation] ERROR: Specified project does not exist. (" + projectArray[i].toString() + ")");
+        }
+        else
+        {
+          projectUUIDs.push(MUUID.from(projectArray[i]));
         }
       }
 
-      projectStr += ")";
 
-      let inputStr: string = annotationUUID.toString() + ") for annotators " + annotatorStr;
-      inputStr += " and image (" + imgUUID.toString() + ") and projects " + projectStr;
-
-
-      if(result)
+      if((await imgUUIDExists(imgUUID.toString())).valueOf())
       {
-        let successStr: string = "[Update Annotation] Successfully updated annotation (" + inputStr;
+        const mdb = await connectDB();
 
-        res.status(201).send(successStr);
+        const collection = mdb.collection("annotations");
+
+        const result = await collection.updateOne(
+                                                  { _id: annotationUUID },
+                                                  { $set: 
+                                                    { annotators: annotatorUUIDs,
+                                                      img: imgUUID,
+                                                      projects: projectUUIDs,
+                                                      label: label,
+                                                      area: calcArea(pts),
+                                                      points: pts
+                                                    }});
+
+
+        const imgArray: string[] = [imgUUID.toString()];
+        const annotationArray: string[] = [annotationUUID.toString()];
+
+        await updateStaffLattice(annotatorArray, projectArray, imgArray, annotationArray);
+
+        await updateProjectLattice(projectArray, annotatorArray, imgArray, annotationArray);
+
+        await updateImgLattice(imgArray, projectArray, annotatorArray, annotationArray);
+
+
+        let annotatorStr: string = "(";
+
+        for(let i = 0; i < annotatorArray.length; i++)
+        {
+          annotatorStr += annotatorArray[i].toString();
+
+          if(i < annotatorArray.length - 1)
+          {
+            annotatorStr += ", ";
+          }
+        }
+
+        annotatorStr += ")";
+
+
+        let projectStr: string = "(";
+
+        for(let i = 0; i < projectArray.length; i++)
+        {
+          projectStr += projectArray[i].toString();
+
+          if(i < projectArray.length - 1)
+          {
+            projectStr += ", ";
+          }
+        }
+
+        projectStr += ")";
+
+        let inputStr: string = annotationUUID.toString() + ") for annotators " + annotatorStr;
+        inputStr += " and image (" + imgUUID.toString() + ") and projects " + projectStr;
+
+
+        if(result)
+        {
+          let successStr: string = "[Update Annotation] Successfully updated annotation (" + inputStr;
+
+          res.status(201).send(successStr);
+        }
+        else
+        {
+          let errorStr: string = "[Update Annotation] ERROR: Failed to update annotation (" + inputStr
+
+          res.status(500).send(errorStr);
+        }
+
       }
       else
       {
-        let errorStr: string = "[Update Annotation] ERROR: Failed to update annotation (" + inputStr
-
-        res.status(500).send(errorStr);
+        throw new Error("[Update Annotation] ERROR: Specified img does not exist. (" + imgUUID.toString() + ")");
       }
 
     }
     else
     {
-      throw new Error("[Update Annotation] ERROR: Specified img does not exist. (" + imgUUID.toString() + ")");
+      throw new Error("[Update Annotation] ERROR: Specified annotation does not exist. (" + annotationUUID.toString() + ")");
     }
-
-      
   }
   catch (error)
   {

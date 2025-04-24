@@ -98,6 +98,37 @@ export const imgUUIDExists = async (UUIDIn: string): Promise<boolean> =>
 
 
 
+export const annotationUUIDExists = async (UUIDIn: string): Promise<boolean> => 
+{
+    const UUIDObj = MUUID.from(UUIDIn);
+
+    const mdb = await connectDB();
+
+    const collection = mdb.collection("annotations");
+
+    const result = await collection.findOne({ _id: UUIDObj }, {projection: {annotators: 0, img: 0, projects: 0, label: 0, area: 0, points: 0}});
+
+    let doesExist: boolean = false;
+
+    if(result && '_id' in result)
+    {
+        if(result._id.toString() === UUIDObj.toString())
+        {
+            doesExist = true;
+        }
+    }
+    else
+    {
+        console.warn('[annotationUUIDExists] Result does not contain expected _id', result);
+    }
+
+    return(doesExist);
+}
+    
+
+
+
+
 export const imgHasAnnotation = async (UUIDIn: string): Promise<boolean> => 
 {
     const UUIDObj = MUUID.from(UUIDIn);
