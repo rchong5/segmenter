@@ -1,0 +1,29 @@
+{
+  "name": "segmenter",
+  "main": "app.js",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "tsc && node dist/app.js",
+    "build": "tsc && node dist/app.js",
+    "serve": "node dist/app.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "mongodb": "^6.15.0",
+    "morgan": "~1.9.1",
+    "uuid": "^11.1.0",
+    "uuid-mongodb": "^2.6.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.5",
+    "@types/express": "^5.0.1",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.14.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
